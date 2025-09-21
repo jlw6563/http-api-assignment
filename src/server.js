@@ -2,7 +2,7 @@ const http = require('http');
 const pageResponse = require('./pageResponse.js');
 const responses = require('./responseHandler.js');
 
-const port = process.env.port || process.env.NODE_PORT || 3000;
+const PORT = process.env.port || process.env.NODE_PORT || 3000;
 
 const urlStruct = {
   '/': pageResponse.getIndex,
@@ -26,6 +26,6 @@ const onRequest = (request, response) => {
   else responses.notFound(request, response);
 };
 
-http.createServer(onRequest).listen(port, () => {
-  console.log(`Listening on port: ${port}`);
+http.createServer(onRequest).listen(PORT, () => {
+  console.log(`Listening on port: ${PORT}`);
 });
