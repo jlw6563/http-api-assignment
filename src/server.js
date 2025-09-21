@@ -1,23 +1,29 @@
 const http = require('http');
+const pageResponse = require('./pageResponse.js');
+const responses = require('./responseHandler.js');
 
 const port = process.env.port || process.env.NODE_PORT || 3000;
 
 const urlStruct = {
-
+  '/': pageResponse.getIndex,
+  '/style.css': pageResponse.getCss,
+  '/badRequest': responses.badRequest,
+  '/unauthorized': responses.unauthorized,
+  '/success': responses.success,
+  '/forbidden': responses.forbidden,
+  '/internal': responses.internal,
+  '/notImplemented': responses.notImplemented,
 };
 
 const onRequest = (request, response) => {
   const protocol = request.connection.encrypted ? 'https' : 'http';
   const parsedURL = new URL(request.url, `${protocol}://${request.headers.host}`);
 
-  request.acceptedTypes = request.headers.accept.split(',');
+  if (request.headers.accept) request.acceptedTypes = request.headers.accept.split(',');
   request.query = Object.fromEntries(parsedURL.searchParams);
 
-  if (urlStruct[parsedURL.pathname]) {
-    urlStruct[parsedURL.pathname](request, response);
-  } else {
-    // Makes this a 404
-  }
+  if (urlStruct[parsedURL.pathname]) urlStruct[parsedURL.pathname](request, response);
+  else responses.notFound(request, response);
 };
 
 http.createServer(onRequest).listen(port, () => {
