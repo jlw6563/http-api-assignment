@@ -2,7 +2,7 @@ const http = require('http');
 const pageResponse = require('./pageResponse.js');
 const responses = require('./responseHandler.js');
 
-const PORT = process.env.port || process.env.NODE_PORT || 3000;
+const PORT = process.env.PORT || process.env.NODE_PORT || 3000;
 
 const urlStruct = {
   '/': pageResponse.getIndex,
